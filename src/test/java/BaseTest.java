@@ -33,8 +33,8 @@ public class BaseTest {
             driver.manage().window().maximize();
             driver.get(baseUrl);
         }
-  /*      @AfterClass
+       @AfterClass
         public static void tearDown() throws Exception {
             driver.quit();
-        }*/
+        }
 }

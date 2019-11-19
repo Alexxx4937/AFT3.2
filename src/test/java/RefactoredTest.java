@@ -6,13 +6,9 @@ import Pages.ResultPage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.openqa.selenium.WebElement;
-
 import java.util.Arrays;
 import java.util.Collection;
-
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertThat;
 
 @RunWith(Parameterized.class)
@@ -34,52 +30,45 @@ public class RefactoredTest extends BaseTest {
     public String game;
 
 
-
-
-
-
     @Test
 
-    public  void testDns() throws InterruptedException {
-        MainPage mainPage=new MainPage(driver);
-        ResultPage resultPage=new ResultPage(driver);
-        ProductPage productPage=new ProductPage(driver);
-        CartPage cartPage=new CartPage(driver);
+    public void testDns() throws InterruptedException {
+        MainPage mainPage = new MainPage(driver);
+        ResultPage resultPage = new ResultPage(driver);
+        ProductPage productPage = new ProductPage(driver);
+        CartPage cartPage = new CartPage(driver);
 
         mainPage.search(consoleName);
         resultPage.choiseProdukt(consoleFullName);
-        double priceConsole=productPage.getPrice(productPage.priceProduct);
+        double priceConsole = productPage.getPrice(productPage.priceProduct);
 
 
         productPage.setSelectGuarantee(2);
-        double priceAddGuarantee=productPage.getPrice(productPage.priceProduct);
+        double priceAddGuarantee = productPage.getPrice(productPage.priceProduct);
 
         productPage.buy();
         mainPage.search(game);
-        double priceGame=productPage.getPrice(productPage.priceProduct);
+        double priceGame = productPage.getPrice(productPage.priceProduct);
 
         productPage.buy();
-        double priceSummCart=productPage.getPrice(productPage.priceCart);
-
-        assertThat(priceGame+priceAddGuarantee,equalTo(priceSummCart));
+        double priceSummCart = productPage.getPrice(productPage.priceCart);
+        cartPage.checkAssert(priceGame + priceAddGuarantee, priceSummCart);
         productPage.goToCart();
         cartPage.checkWarranty();
-        cartPage.checkPrice(1,priceConsole);
-        cartPage.checkPrice(2,priceGame);
-        cartPage.checkTotalPrice(cartPage.summPrice,priceSummCart);
+        cartPage.checkPrice(1, priceConsole);
+        cartPage.checkPrice(2, priceGame);
+        cartPage.checkTotalPrice(cartPage.summPrice, priceSummCart);
         cartPage.remove(2);
-        /*cartPage.checkRemove(2);*/
+        assertThat(false, equalTo(cartPage.checkDeleteItem(2)));
+      cartPage.checkTotalPrice(cartPage.summPrice,priceSummCart-priceGame);
         cartPage.setAddProduct(cartPage.addProduct);
         cartPage.setAddProduct(cartPage.addProduct);
+        cartPage.checkPrice(1, 3 * priceConsole);
         cartPage.setAddProduct(cartPage.returnItem);
 
+        cartPage.checkTotalPrice(cartPage.summPrice,3*priceAddGuarantee+priceGame);
 
 
 
-
-
-
-
-
-   }
+    }
 }

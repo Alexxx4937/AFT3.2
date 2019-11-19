@@ -1,12 +1,16 @@
 package Pages;
 
+import org.hamcrest.CoreMatchers;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import static org.hamcrest.core.IsEqual.equalTo;
+
+import java.util.List;
+
 import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.equalTo;
 
 public class CartPage extends BasePage {
     public CartPage(WebDriver driver) {
@@ -51,9 +55,16 @@ public  WebElement addProduct;
         driver.findElement(By.xpath("//div[@class='cart-list__products']/div[" + i + "]//button[@class='remove-button']")).click();
         Thread.sleep(1000);
     }
-    public void  checkRemove(int i ){
+
+    public void checkAssert(double a,double b){
+        assertThat(a, equalTo(b));
+    }
 
 
+
+    public boolean checkDeleteItem(int i) {
+        List<WebElement> elements = driver.findElements(By.xpath("//div[@class='cart-list__product']/div"));
+        return elements.size() >= i;
     }
 
     public  void setAddProduct(WebElement element) throws InterruptedException {
